@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e3edf5;
+            outline: none;
+            font-family: sans-serif;
+        }
+        
+        .container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .calculator {
+            background-color: #c3def3;
+            padding: 15px;
+            border-radius: 30px;
+            box-shadow: inset -5px -5px 12px #d9f5f5, -5px -5px 12px rgba(0, 0, 0, 0.16);
+            display: grid;
+            grid-template-columns: repeat(4, 70px);
+            box-sizing: border-box;
+        }
+        
+        input {
+            grid-column: span 4;
+            height: 70px;
+            width: 250px;
+            background-color: #d9e9f5;
+            box-shadow: inset -5px -5px 12px #ecffff, inset -5px -5px 12px rgba(0, 0, 0, 0.16);
+            border: none;
+            border-radius: 30px;
+            color: rgb(70, 70, 70);
+            font-size: 40px;
+            text-align: end;
+            margin: 40px auto 30px auto;
+            padding-right: 17px;
+            caret-color: transparent;
+        }
+        
+        button {
+            border: none;
+            height: 48px;
+            width: 48px;
+            background-color: #d9e9f5;
+            box-shadow: -5px -5px 12px #cff0fa, 5px 5px 12px rgba(0, 0, 0, 0.16);
+            border-radius: 20px;
+            margin: 8px;
+            font-size: 16px;
+        }
+        
+        .equal {
+            width: 115px;
+            border-radius: 40px;
+            background-color: #d9e9f5;
+            box-shadow: -5px -5px 12px #cff0fa, 5px 5px 12px rgba(0, 0, 0, 0.16);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="calculator">
+            <input type="text" placeholder="0" id="output-screen" onkeypress="return isNumber(event)" autofocus/>
+            <button onclick="clr()">Cl</button>
+            <button onclick="del()">Del</button>
+            <button onclick="display('%')">%</button>
+            <button onclick="display('/')">/</button>
+            <button onclick="display('7')">7</button>
+            <button onclick="display('8')">8</button>
+            <button onclick="display('9')">9</button>
+            <button onclick="display('*')">*</button>
+            <button onclick="display('4')">4</button>
+            <button onclick="display('5')">5</button>
+            <button onclick="display('6')">6</button>
+            <button onclick="display('-')">-</button>
+            <button onclick="display('1')">1</button>
+            <button onclick="display('2')">2</button>
+            <button onclick="display('3')">3</button>
+            <button onclick="display('+')">+</button>
+            <button onclick="display('.')">.</button>
+            <button onclick="display('0')">0</button>
+            <button class="equal" onkeypress="calculate()" onclick="calculate()">=</button>
+        </div>
+    </div>
+    <script>
+        var outputScreen = document.getElementById("output-screen");
+        var notAllowedChars = [37, 38, 39, 40, 41, 44, 57];
+
+        outputScreen.addEventListener("blur", function(event) {
+            setTimeout(function() {
+                outputScreen.focus();
+            }, 100);
+        }, true);
+
+        const pasteBox = document.getElementById("output-screen");
+        pasteBox.onpaste = e => {
+            e.preventDefault();
+            return false;
+        };
+
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            let charCode = (evt.which) ? evt.which : evt.keyCode;
+            // if (charCode > 31 && (charCode < 37 || charCode > 57 || charCode == 38 || charCode == 39 || charCode == 40 || charCode == 41 || charCode == 44)) {
+            //     return false;
+            // }
+            if (charCode > 31 && (charCode < 37 || charCode > 57)) {
+                return false;
+            } else if (charCode == notAllowedChars.include) {
+                return false;
+            }
+            return true;
+        }
+
+        outputScreen.addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) {
+                calculate();
+            }
+        });
+
+
+        function display(num) {
+            outputScreen.value += num;
+        }
+
+        function calculate() {
+            try {
+                outputScreen.value = eval(outputScreen.value);
+            } catch (err) {
+                alert("Invalid values!");
+            }
+        }
+
+        function clr() {
+            outputScreen.value = "";
+        }
+
+        function del() {
+            outputScreen.value = outputScreen.value.slice(0, -1);
+        }
+    </script>
+</body>
+
+</html>
